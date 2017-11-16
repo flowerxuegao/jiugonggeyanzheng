@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title></title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <script src = "js/jquery.js"></script>
+    <script src = "js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+    	
+   		document.addEventListener('plusready', function(){
+   			//console.log("所有plus api都应该在此事件发生后调用，否则会出现plus is undefined。"
+   			
+   		});
+   		
+    </script>
+    <style>
+    	*{box-sizing: border-box;}
+    body,ul,li,p{margin:0;padding:0;list-style: none;}
+    	.mask{width:100%;height:100%;position:fixed;bottom:0;left:0;background:rgba(0,0,0,0.2);}
+    	.info{width:80%;height:26rem;background:#fff;border-radius:15px;position:absolute;left:0;top:0;right:0;bottom:0;margin:auto}
+    	p,div{width:100%;text-align: center;margin:10px auto}
+    	ul{width:50%;height:auto;overflow: hidden;margin:20px auto;}
+    	ul li{float:left;width:33.333%;line-height: 30px;border-right:1px solid red;border-bottom:1px solid red;box-sizing:border-box;font-size:18px}
+    	.right{border-right:0}
+    	.bottom{border-bottom:0}
+    	input{border:0;text-align: center;}
+    	.biaozhun{color:red}
+    	/*.info{display:none}*/
+    </style>
+</head>
+<body>
+<button id= "btn">验证</button>
+
+<div class="mask">
+	<div class="info">
+		<p>系统检测到异常行为，请先进行九宫格验证</p>
+		<p>请在下方的键盘中依次点击</p>
+		<div class = "biaozhun">2-8-6-5</div>
+		<p>
+			<input class = "msgInput" type="text" placeholder = "点击九宫格输入" />
+		</p>
+		<ul class = "bord">
+			<li>1</li>
+			<li>2</li>
+			<li class = "right">3</li>
+			<li>4</li>
+			<li>5</li>
+			<li class = "right">6</li>
+			<li class = "bottom">7</li>
+			<li class = "bottom">8</li>
+			<li class = "right bottom">9</li>
+		</ul>
+	</div>
+</div>
+	<script>
+		$(function(){
+//			$("#btn").click(function(){
+//				$(".mask").show();
+//				$(".info").show();
+//			})
+		
+		function getArrayItems(arr, num) {
+    //新建一个数组,将传入的数组复制过来,用于运算,而不要直接操作传入的数组;
+    var temp_array = new Array();
+    for (var index in arr) {
+        temp_array.push(arr[index]);
+    }
+    //取出的数值项,保存在此数组
+    var return_array = new Array();
+    for (var i = 0; i<num; i++) {
+        //判断如果数组还有可以取出的元素,以防下标越界
+        if (temp_array.length>0) {
+            //在数组中产生一个随机索引
+            var arrIndex = Math.floor(Math.random()*temp_array.length);
+            //将此随机索引的对应的数组元素值复制出来
+            return_array[i] = temp_array[arrIndex];
+            //然后删掉此索引的数组元素,这时候temp_array变为新的数组
+            temp_array.splice(arrIndex, 1);
+        } else {
+            //数组中数据项取完后,退出循环,比如数组本来只有10项,但要求取出20项.
+            break;
+        }
+    }
+    return return_array;
+}
+//测试
+var ArrList=[1,2,3,4,5,6,7,8,9];
+var bordInfo = getArrayItems(ArrList,9);
+for(var m=0;m<bordInfo.length;m++){
+	$(".bord").find("li").eq(m).html(bordInfo[m]);
+//	console.log($(".bord").find("li").eq(m).html());
+}
+//console.log(getArrayItems(ArrList,4));
+var newArr = [];
+newArr = getArrayItems(ArrList,4);
+console.log(newArr);
+
+var str = newArr[0]+"-"+newArr[1]+"-"+newArr[2]+"-"+newArr[3];
+console.log(str)
+$(".biaozhun").html(str);
+})	
+
+$(".bord").find("li").each(function(index){
+	var i=0;
+	$(this).click(function(){
+		
+//		i++;
+//		console.log(i)
+//		var sum = i;
+//		console.log("sum="+sum)
+//		if(sum==4){
+//			alert("bunegnzaidianle");
+//			$(this).unbind('click');
+//			return;
+//		}
+//		alert($(this).html())
+		var result=$(".msgInput").val();
+		result+=$(this).html();
+		
+		$(".msgInput").val(result);
+		console.log($(".biaozhun").html().split("-"))
+		console.log($(".msgInput").val())
+		var inputString = $(".msgInput").val();
+		var inputArr = [];
+		for(var i=0;i<inputString.length;i++){
+			inputArr.push(inputString[i]);
+		}
+		console.log(inputArr)
+		var biaozhunArr = $(".biaozhun").html().split("-");
+		if(inputArr.toString()===biaozhunArr.toString()){
+			alert("seccess");
+			return;
+//			$(".mask").hide();
+//			$(".info").hide();
+		}
+		//fail情况
+		/*
+		 * 1.点击次数超过4次
+		 * 2.数据不匹配
+		 * 3
+		 */
+		
+	})
+})
+	</script>
+</body>
+</html>
